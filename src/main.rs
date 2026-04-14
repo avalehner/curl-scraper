@@ -15,12 +15,14 @@ struct Post {
 #[tokio::main] //allows async functions to run 
 async fn main() -> Result<(),Box<dyn std::error::Error>> { //() means if it working nothing meaningful will be returned. Box<dyn std::error::Error> meains it failed and here is some type of error
     //GET Request 
-    let response = reqwest::get("https://api.pullpush.io/reddit/search/submission/?subreddit=curlyhair&title=mousse")
+    let response = reqwest::get("https://api.pullpush.io/reddit/search/submission/?subreddit=curlyhair&title=gel")
         .await?; //? if error sends it to top level rather than dealing with it there
     let api_response = response.json::<ApiResponse>().await?; //the ::<ApiResponse> turbofish tells serde which type to deserialize into
 
     for res in &api_response.data {
-        println!("{}", res.title)
+        println!("{}", res.title); 
+        println!("{:?}", res.selftext.as_deref().unwrap_or("no body")); 
+        println!("{}", res.created_utc)
     }
 
     Ok(()) //signals success 
